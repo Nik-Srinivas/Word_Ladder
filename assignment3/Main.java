@@ -22,6 +22,13 @@ public class Main {
 		Create a linked list for words that are off by one letter? 
 	 */
 	static Set<String> dictionary;
+
+	// creating a My HashTable Dictionary
+	static HashSet<String> wordMap = new HashSet<String>();
+
+	// creating a My HashTable Dictionary
+	static ArrayList<String> dfsList = new ArrayList<String>();
+	static int dfsListIndex = 0;
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -36,11 +43,13 @@ public class Main {
 			kb = new Scanner(System.in);// default input from Stdin
 			ps = System.out;			// default output to Stdout
 		}
-		initialize();
+		initialize();  //Makes Dict
 		ArrayList<String> input = parse(kb);
 
-		ArrayList<String> test = getAdjacentWords(input.get(0), dictionary);
-		System.out.println(test);
+
+		ArrayList<String> answer = getWordLadderDFS(input.get(0),input.get(1));
+		System.out.println(answer);
+
 	}
 	
 	public static void initialize() {
@@ -90,13 +99,36 @@ public class Main {
 		words.add(endword.toUpperCase());
 		return words;
 	}
-	
+
+
+
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
+		ArrayList<String> test = getAdjacentWords(start, dictionary);
+		System.out.println(start + " DFS Start");
+		System.out.println(test + " Start's Adjacent List");
+		wordMap.add(start);
+		if (start.equals(end)) {
+			dfsList.add(dfsListIndex, end);
+			return dfsList;
+		}
+		if (test.isEmpty()) {
+			dfsListIndex--;
+			return dfsList;
+		}
 
 
-		
-		return null; // replace this line later with real return
-	}
+		for (int i=0; i < test.size() && !dfsList.contains(end); i++) {
+			System.out.println(wordMap + " Word Map");
+			System.out.println(test.get(i) + " Prior word check");
+			if (!wordMap.contains(test.get(i))) {
+				System.out.println(start + " Child Input");
+				dfsList.add(dfsListIndex, start);
+				dfsListIndex++;
+				getWordLadderDFS(test.get(i), end);
+				}
+			}
+		return dfsList;
+		}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
