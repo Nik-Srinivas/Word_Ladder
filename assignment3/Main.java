@@ -104,11 +104,14 @@ public class Main {
 
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		ArrayList<String> test = getAdjacentWords(start, dictionary);
-		System.out.println(start + " DFS Start");
-		System.out.println(test + " Start's Adjacent List");
+		System.out.println("Parent Node: "+ start);
+		System.out.println("Adjacent List : " + test);
+		dfsList.add(dfsListIndex, start);
+		dfsListIndex++;
+		System.out.println("Path: " + dfsList);
 		wordMap.add(start);
 		if (start.equals(end)) {
-			dfsList.add(dfsListIndex, end);
+			//dfsList.add(dfsListIndex, end);
 			return dfsList;
 		}
 		if (test.isEmpty()) {
@@ -116,15 +119,16 @@ public class Main {
 			return dfsList;
 		}
 
-
 		for (int i=0; i < test.size() && !dfsList.contains(end); i++) {
+			System.out.println("Index value: " + dfsListIndex);
 			System.out.println(wordMap + " Word Map");
-			System.out.println(test.get(i) + " Prior word check");
 			if (!wordMap.contains(test.get(i))) {
-				System.out.println(start + " Child Input");
-				dfsList.add(dfsListIndex, start);
-				dfsListIndex++;
+				System.out.println("Going to check " + test.get(i));
 				getWordLadderDFS(test.get(i), end);
+				if(!dfsList.contains(end)) {
+					dfsListIndex--;
+					dfsList.remove(dfsListIndex);
+				}
 				}
 			}
 		return dfsList;
