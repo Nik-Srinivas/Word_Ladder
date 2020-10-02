@@ -18,9 +18,6 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	/*
-		Create a linked list for words that are off by one letter? 
-	 */
 	static Set<String> dictionary;
 
 	// creating a My HashTable Dictionary
@@ -104,36 +101,33 @@ public class Main {
 
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		ArrayList<String> test = getAdjacentWords(start, dictionary);
-		System.out.println("Parent Node: "+ start);
-		System.out.println("Adjacent List : " + test);
 		dfsList.add(dfsListIndex, start);
 		dfsListIndex++;
-		System.out.println("Path: " + dfsList);
 		wordMap.add(start);
 		if (start.equals(end)) {
-			//dfsList.add(dfsListIndex, end);
 			return dfsList;
 		}
 		if (test.isEmpty()) {
 			dfsListIndex--;
+			if(dfsList.size() == 1)
+				dfsList.add(end);
 			return dfsList;
 		}
 
 		for (int i=0; i < test.size() && !dfsList.contains(end); i++) {
-			System.out.println("Index value: " + dfsListIndex);
-			System.out.println(wordMap + " Word Map");
 			if (!wordMap.contains(test.get(i))) {
-				System.out.println("Going to check " + test.get(i));
-				System.out.println("Hello");
 				getWordLadderDFS(test.get(i), end);
 				if(!dfsList.contains(end)) {
 					dfsListIndex--;
 					dfsList.remove(dfsListIndex);
-				}
+					}
 				}
 			}
+
+		if(dfsList.size() == 1)
+			dfsList.add(end);
 		return dfsList;
-		}
+	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
@@ -155,7 +149,7 @@ public class Main {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
 		try {
-			infile = new Scanner (new File("short_dict.txt"));
+			infile = new Scanner (new File("five_letter_words.txt"));
 		} catch (FileNotFoundException e) {
 			System.out.println("Dictionary File not Found!");
 			e.printStackTrace();
