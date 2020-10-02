@@ -124,6 +124,7 @@ public class Main {
 			System.out.println(wordMap + " Word Map");
 			if (!wordMap.contains(test.get(i))) {
 				System.out.println("Going to check " + test.get(i));
+				System.out.println("Hello");
 				getWordLadderDFS(test.get(i), end);
 				if(!dfsList.contains(end)) {
 					dfsListIndex--;
