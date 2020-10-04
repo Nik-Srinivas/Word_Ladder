@@ -14,6 +14,7 @@
 
 
 package assignment3;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.io.*;
 
@@ -41,8 +42,8 @@ public class Main {
 			ps = System.out;			// default output to Stdout
 		}
 		initialize();  //Makes Dict
+		System.out.println("Start word, end word");
 		ArrayList<String> input = parse(kb);
-
 
 		ArrayList<String> dfs_answer = getWordLadderDFS(input.get(0),input.get(1));
 		ArrayList<String> bfs_answer = getWordLadderBFS(input.get(0), input.get(1));
@@ -68,40 +69,6 @@ public class Main {
 	 * If command is /quit, return empty ArrayList.
 	 */
 
-	public static ArrayList<String> testGetAdjWords(String word, String end, Set<String> dictionary) {
-		ArrayList<String> adjacentWords = new ArrayList<>();
-		char[] charArray = word.toCharArray();
-		char[] endArray = end.toCharArray();
-
-		for(int i = charArray.length - 1; i >= 0; i--) {
-			if(charArray[i] == endArray[i])
-				continue;
-			char[] copyArray = charArray.clone();
-			copyArray[i] = endArray[i];
-			String modifiedString = new String(copyArray);
-			modifiedString.toUpperCase();
-			if(dictionary.contains(modifiedString)) {
-				adjacentWords.add(modifiedString);
-				//dictionary.remove(modifiedString);
-			}
-		}
-
-		for(int i = charArray.length - 1; i >= 0; i--) {
-			char[] copyArray = charArray.clone();
-			for(int j = 'A'; j <= 'Z'; j++) { //Start near
-				if(charArray[i] == (char)j)
-					continue;
-				copyArray[i] = (char)j;
-				String modifiedString = new String(copyArray);
-				modifiedString.toUpperCase();
-				if(dictionary.contains(modifiedString)) {
-					adjacentWords.add(modifiedString);
-					//dictionary.remove(modifiedString);
-				}
-			}
-		}
-		return adjacentWords;
-	}
 	public static ArrayList<String> getAdjacentWords(String word, Set<String> dictionary) {
 		ArrayList<String> adjacentWords = new ArrayList<>();
 		char[] charArray = word.toCharArray();
@@ -122,8 +89,8 @@ public class Main {
 		}
 		return adjacentWords;
 	}
+
 	public static ArrayList<String> parse(Scanner keyboard) {
-		System.out.println("Start word, end word");
 		String startword = keyboard.next();
 		if(startword.equals("/quit")) {
 			return new ArrayList<String>();
@@ -139,50 +106,48 @@ public class Main {
 	}
 
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
-		ArrayList<String> uppercaseOutput = upperDfsOutput(start, end);
-		ArrayList<String> lowercaseOutput = new ArrayList<String>();
-		for (int i = 0; i < uppercaseOutput.size(); i++)
-			lowercaseOutput.add(uppercaseOutput.get(i).toLowerCase());
-
-		return  lowercaseOutput;
-	}
-	public static ArrayList<String> upperDfsOutput(String start, String end) {
-
-		ArrayList<String> test = testGetAdjWords(start, end, dictionary);
-		if(test.contains(end)) {
-			dfsList.add(dfsListIndex, end);
-			return dfsList;
+		ArrayList<String> sol = dfsHelper(start, end);
+		ArrayList<String> path = new ArrayList<String>();
+		if(sol.isEmpty()) {
+			path.add(start);
+			path.add(end);
 		}
-		dfsList.add(dfsListIndex, start);
-		dfsListIndex++;
-		wordMap.add(start);
-
-		if (start.equals(end)) {
-			return dfsList;
-		}
-		if (test.isEmpty()) {
-			dfsListIndex--;
-			if(dfsList.size() == 1)
-				dfsList.add(end);
-			return dfsList;
-		}
-
-		for (int i=0; i < test.size() && !dfsList.contains(end); i++) {
-			if (!wordMap.contains(test.get(i))) {
-				getWordLadderDFS(test.get(i), end);
-				if(!dfsList.contains(end)) {
-					dfsListIndex--;
-					dfsList.remove(dfsListIndex);
-				}
+		else {
+			for (int i = 1; i < sol.size() + 1; i++) {
+				path.add(sol.get(sol.size() - i).toLowerCase());
 			}
 		}
-
-		if(dfsList.size() == 1)
-			dfsList.add(end);
-		return dfsList;
+		return path;
 	}
 
-	public static ArrayList<String> upperBfsOutput(String start, String end) {
+	public static ArrayList<String> dfsHelper(String start, String end) {
+		ArrayList<String> adjacentWords = getAdjacentWords(start, dictionary);
+		ArrayList<String> path = new ArrayList<String>();
+		ArrayList<String> ladder = new ArrayList<String>();
+		if (adjacentWords.contains(end)) {
+			ladder.add(end);
+			ladder.add(start);
+			return ladder;
+		}
+
+		else if (adjacentWords.isEmpty()) {
+			return path;
+		}
+
+		for (int i = 0; i < adjacentWords.size(); i++) {
+			ladder = dfsHelper(adjacentWords.get(i),end);
+
+			if(!ladder.isEmpty())
+				path = ladder;
+		}
+
+		if (!path.isEmpty()) {
+			path.add(start);
+		}
+		return path;
+	}
+
+	public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		HashMap<String, String> predecessorMap = new HashMap<String, String>(); //(Child, Parent)
 		Set<String> bfsDictionary = makeDictionary();
 		ArrayList<String> list = new ArrayList<String>();
@@ -215,26 +180,22 @@ public class Main {
 			}
 			list.add(start);
 			for(int i = 1; i < list.size() + 1; i++) {
-				path.add(list.get(list.size() - i));
+				path.add(list.get(list.size() - i).toLowerCase());
 			}
 		}
 
 		return path; // replace this line later with real return
 	}
-	public static ArrayList<String> getWordLadderBFS(String start, String end) {
-		ArrayList<String> uppercaseOutput = upperBfsOutput(start, end);
-		ArrayList<String> lowercaseOutput = new ArrayList<String>();
-		for (int i = 0; i < uppercaseOutput.size(); i++)
-			lowercaseOutput.add(uppercaseOutput.get(i).toLowerCase());
-
-		return  lowercaseOutput;
-	}
 
 	public static void printLadder(ArrayList<String> ladder) {
-
-		System.out.println("a " + ladder.size() + "-rung word ladder exists between " + ladder.get(0) + " and " + ladder.get(ladder.size() - 1 ) + ".");
-		for (int i=0; i<ladder.size(); i++){
-			System.out.println(ladder.get(i));
+		if(ladder.size() == 2) {
+			System.out.println("no word ladder can be found between " + ladder.get(0) + " and " + ladder.get(1));
+		}
+		else {
+			System.out.println("a " + ladder.size() + "-rung word ladder exists between " + ladder.get(0) + " and " + ladder.get(ladder.size() - 1) + ".");
+			for (int i = 0; i < ladder.size(); i++) {
+				System.out.println(ladder.get(i));
+			}
 		}
 	}
 
