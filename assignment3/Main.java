@@ -26,7 +26,7 @@ public class Main {
 	// creating a My HashTable Dictionary
 	static ArrayList<String> dfsList = new ArrayList<String>();
 	static int dfsListIndex = 0;
-
+///////////////////////////////////////////////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception {
 
 		Scanner kb;	// input Scanner for commands
@@ -44,13 +44,20 @@ public class Main {
 		ArrayList<String> input = parse(kb);
 
 
-		ArrayList<String> answer = getWordLadderDFS(input.get(0),input.get(1));
-		//ArrayList<String> answer = getWordLadderBFS(input.get(0), input.get(1));
-		System.out.println(answer);
-		System.out.println(answer.size());
+		ArrayList<String> dfs_answer = getWordLadderDFS(input.get(0),input.get(1));
+		ArrayList<String> bfs_answer = getWordLadderBFS(input.get(0), input.get(1));
+
+		System.out.println("This is the DFS implementation of the word ladder with: " + input.get(0) + " and " + input.get(1) );
+		System.out.println("");
+		printLadder(dfs_answer);
+
+		System.out.println("");System.out.println("");System.out.println("");
+
+		System.out.println("This is the BFS implementation of the word ladder with: " + input.get(0) + " and " + input.get(1) );
+		System.out.println("");
+		printLadder(bfs_answer);
 
 	}
-
 	public static void initialize() {
 		dictionary = makeDictionary();
 	}
@@ -115,7 +122,6 @@ public class Main {
 		}
 		return adjacentWords;
 	}
-
 	public static ArrayList<String> parse(Scanner keyboard) {
 		System.out.println("Start word, end word");
 		String startword = keyboard.next();
@@ -132,9 +138,16 @@ public class Main {
 		return words;
 	}
 
-
-
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
+		ArrayList<String> uppercaseOutput = upperDfsOutput(start, end);
+		ArrayList<String> lowercaseOutput = new ArrayList<String>();
+		for (int i = 0; i < uppercaseOutput.size(); i++)
+			lowercaseOutput.add(uppercaseOutput.get(i).toLowerCase());
+
+		return  lowercaseOutput;
+	}
+	public static ArrayList<String> upperDfsOutput(String start, String end) {
+
 		ArrayList<String> test = testGetAdjWords(start, end, dictionary);
 		if(test.contains(end)) {
 			dfsList.add(dfsListIndex, end);
@@ -160,16 +173,16 @@ public class Main {
 				if(!dfsList.contains(end)) {
 					dfsListIndex--;
 					dfsList.remove(dfsListIndex);
-					}
 				}
 			}
+		}
 
 		if(dfsList.size() == 1)
 			dfsList.add(end);
 		return dfsList;
 	}
 
-    public static ArrayList<String> getWordLadderBFS(String start, String end) {
+	public static ArrayList<String> upperBfsOutput(String start, String end) {
 		HashMap<String, String> predecessorMap = new HashMap<String, String>(); //(Child, Parent)
 		Set<String> bfsDictionary = makeDictionary();
 		ArrayList<String> list = new ArrayList<String>();
@@ -208,14 +221,22 @@ public class Main {
 
 		return path; // replace this line later with real return
 	}
+	public static ArrayList<String> getWordLadderBFS(String start, String end) {
+		ArrayList<String> uppercaseOutput = upperBfsOutput(start, end);
+		ArrayList<String> lowercaseOutput = new ArrayList<String>();
+		for (int i = 0; i < uppercaseOutput.size(); i++)
+			lowercaseOutput.add(uppercaseOutput.get(i).toLowerCase());
 
+		return  lowercaseOutput;
+	}
 
 	public static void printLadder(ArrayList<String> ladder) {
 
+		System.out.println("a " + ladder.size() + "-rung word ladder exists between " + ladder.get(0) + " and " + ladder.get(ladder.size() - 1 ) + ".");
+		for (int i=0; i<ladder.size(); i++){
+			System.out.println(ladder.get(i));
+		}
 	}
-	// TODO
-	// Other private static methods here
-
 
 	/* Do not modify makeDictionary */
 	public static Set<String>  makeDictionary () {
