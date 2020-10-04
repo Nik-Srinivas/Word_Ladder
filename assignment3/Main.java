@@ -26,9 +26,9 @@ public class Main {
 	// creating a My HashTable Dictionary
 	static ArrayList<String> dfsList = new ArrayList<String>();
 	static int dfsListIndex = 0;
-	
+
 	public static void main(String[] args) throws Exception {
-		
+
 		Scanner kb;	// input Scanner for commands
 		PrintStream ps;	// output file, for student testing and grading only
 		// If arguments are specified, read/write from/to files instead of Std IO.
@@ -47,17 +47,18 @@ public class Main {
 		ArrayList<String> answer = getWordLadderDFS(input.get(0),input.get(1));
 		//ArrayList<String> answer = getWordLadderBFS(input.get(0), input.get(1));
 		System.out.println(answer);
+		System.out.println(answer.size());
 
 	}
-	
+
 	public static void initialize() {
 		dictionary = makeDictionary();
 	}
-	
+
 	/**
 	 * @param keyboard Scanner connected to System.in
-	 * @return ArrayList of Strings containing start word and end word. 
-	 * If command is /quit, return empty ArrayList. 
+	 * @return ArrayList of Strings containing start word and end word.
+	 * If command is /quit, return empty ArrayList.
 	 */
 
 	public static ArrayList<String> testGetAdjWords(String word, String end, Set<String> dictionary) {
@@ -167,7 +168,7 @@ public class Main {
 			dfsList.add(end);
 		return dfsList;
 	}
-	
+
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		HashMap<String, String> predecessorMap = new HashMap<String, String>(); //(Child, Parent)
 		Set<String> bfsDictionary = makeDictionary();
@@ -207,10 +208,10 @@ public class Main {
 
 		return path; // replace this line later with real return
 	}
-    
-	
+
+
 	public static void printLadder(ArrayList<String> ladder) {
-		
+
 	}
 	// TODO
 	// Other private static methods here
