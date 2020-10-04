@@ -45,6 +45,7 @@ public class Main {
 
 
 		ArrayList<String> answer = getWordLadderDFS(input.get(0),input.get(1));
+		//ArrayList<String> answer = getWordLadderBFS(input.get(0), input.get(1));
 		System.out.println(answer);
 
 	}
@@ -65,7 +66,7 @@ public class Main {
 
 		for(int i = 0; i < charArray.length; i++) {
 			char[] copyArray = charArray.clone();
-			for(int j = 'A'; j <= 'Z'; j++) {
+			for(int j = 'A'; j <= 'Z'; j++) { //Start near
 				if(charArray[i] == (char)j)
 					continue;
 				copyArray[i] = (char)j;
@@ -100,6 +101,7 @@ public class Main {
 
 
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
+		System.out.println(dfsList);
 		ArrayList<String> test = getAdjacentWords(start, dictionary);
 		dfsList.add(dfsListIndex, start);
 		dfsListIndex++;
@@ -130,10 +132,43 @@ public class Main {
 	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
-		
-		// TODO some code
-		
-		return null; // replace this line later with real return
+		HashMap<String, String> predecessorMap = new HashMap<String, String>(); //(Child, Parent)
+		Set<String> bfsDictionary = makeDictionary();
+		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> path = new ArrayList<String>();
+		LinkedList<String> queue = new LinkedList<String>();
+		queue.add(start);
+		boolean flag = false;
+		while(!queue.isEmpty() && !flag) {
+			String currentWord = queue.removeFirst();
+			ArrayList<String> adjWords = getAdjacentWords(currentWord, bfsDictionary);
+			for(int i = 0; i < adjWords.size(); i++) {
+				queue.add(adjWords.get(i));
+				bfsDictionary.remove(adjWords.get(i));
+				predecessorMap.put(adjWords.get(i), currentWord);
+				if(adjWords.get(i).equals(end)) {
+					flag = true;
+					break;
+				}
+			}
+		}
+		if(predecessorMap.get(end) == null) {
+			path.add(start);
+			path.add(end);
+		}
+		else {
+			String currentWord = end;
+			while(currentWord != start) {
+				list.add(currentWord);
+				currentWord = predecessorMap.get(currentWord);
+			}
+			list.add(start);
+			for(int i = 1; i < list.size() + 1; i++) {
+				path.add(list.get(list.size() - i));
+			}
+		}
+
+		return path; // replace this line later with real return
 	}
     
 	
