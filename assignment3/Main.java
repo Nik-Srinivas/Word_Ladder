@@ -74,7 +74,7 @@ public class Main {
 			modifiedString.toUpperCase();
 			if(dictionary.contains(modifiedString)) {
 				adjacentWords.add(modifiedString);
-				dictionary.remove(modifiedString);
+				//dictionary.remove(modifiedString);
 			}
 		}
 
