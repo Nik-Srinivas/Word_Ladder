@@ -60,6 +60,40 @@ public class Main {
 	 * If command is /quit, return empty ArrayList. 
 	 */
 
+	public static ArrayList<String> testGetAdjWords(String word, String end, Set<String> dictionary) {
+		ArrayList<String> adjacentWords = new ArrayList<>();
+		char[] charArray = word.toCharArray();
+		char[] endArray = end.toCharArray();
+
+		for(int i = charArray.length - 1; i >= 0; i--) {
+			if(charArray[i] == endArray[i])
+				continue;
+			char[] copyArray = charArray.clone();
+			copyArray[i] = endArray[i];
+			String modifiedString = new String(copyArray);
+			modifiedString.toUpperCase();
+			if(dictionary.contains(modifiedString)) {
+				adjacentWords.add(modifiedString);
+				dictionary.remove(modifiedString);
+			}
+		}
+
+		for(int i = charArray.length - 1; i >= 0; i--) {
+			char[] copyArray = charArray.clone();
+			for(int j = 'A'; j <= 'Z'; j++) { //Start near
+				if(charArray[i] == (char)j)
+					continue;
+				copyArray[i] = (char)j;
+				String modifiedString = new String(copyArray);
+				modifiedString.toUpperCase();
+				if(dictionary.contains(modifiedString)) {
+					adjacentWords.add(modifiedString);
+					//dictionary.remove(modifiedString);
+				}
+			}
+		}
+		return adjacentWords;
+	}
 	public static ArrayList<String> getAdjacentWords(String word, Set<String> dictionary) {
 		ArrayList<String> adjacentWords = new ArrayList<>();
 		char[] charArray = word.toCharArray();
@@ -74,11 +108,10 @@ public class Main {
 				modifiedString.toUpperCase();
 				if(dictionary.contains(modifiedString)) {
 					adjacentWords.add(modifiedString);
-					//dictionary.remove(modifiedString);
+					dictionary.remove(modifiedString);
 				}
 			}
 		}
-
 		return adjacentWords;
 	}
 
@@ -101,11 +134,15 @@ public class Main {
 
 
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
-		System.out.println(dfsList);
-		ArrayList<String> test = getAdjacentWords(start, dictionary);
+		ArrayList<String> test = testGetAdjWords(start, end, dictionary);
+		if(test.contains(end)) {
+			dfsList.add(dfsListIndex, end);
+			return dfsList;
+		}
 		dfsList.add(dfsListIndex, start);
 		dfsListIndex++;
 		wordMap.add(start);
+
 		if (start.equals(end)) {
 			return dfsList;
 		}
