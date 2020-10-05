@@ -5,7 +5,7 @@
  * Ricky Tiet
  * rpt446
  * Slip days used: <0>
- * Git URL:
+ * Git URL: https://github.com/Nik-Srinivas/Word_Ladder
  * Fall 2020
  */
 
