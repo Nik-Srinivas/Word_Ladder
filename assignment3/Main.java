@@ -103,6 +103,8 @@ public class Main {
 	}
 
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
+		start = start.toUpperCase();
+		end = end.toUpperCase();
 		ArrayList<String> sol = dfsHelper(start, end);
 		ArrayList<String> path = new ArrayList<String>();
 		if(sol.isEmpty()) {
@@ -193,7 +195,7 @@ public class Main {
 		else {
 			System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between " + ladder.get(0) + " and " + ladder.get(ladder.size() - 1) + ".");
 			for (int i = 0; i < ladder.size(); i++) {
-				System.out.println(ladder.get(i));
+				System.out.println(ladder.get(i).toLowerCase());
 			}
 		}
 	}
