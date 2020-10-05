@@ -1,12 +1,9 @@
 /* WORD LADDER Main.java
  * EE422C Project 3 submission by
- * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * Nik Srinivas
+ * ns29374
+ * Ricky Tiet
+ * rpt446
  * Slip days used: <0>
  * Git URL:
  * Fall 2020
@@ -148,6 +145,8 @@ public class Main {
 	}
 
 	public static ArrayList<String> getWordLadderBFS(String start, String end) {
+		start = start.toUpperCase();
+		end = end.toUpperCase();
 		HashMap<String, String> predecessorMap = new HashMap<String, String>(); //(Child, Parent)
 		Set<String> bfsDictionary = makeDictionary();
 		ArrayList<String> list = new ArrayList<String>();
