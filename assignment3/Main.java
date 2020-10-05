@@ -67,7 +67,7 @@ public class Main {
 	 */
 
 	public static ArrayList<String> getAdjacentWords(String word, Set<String> dictionary) {
-		ArrayList<String> adjacentWords = new ArrayList<>();
+		ArrayList<String> adjacentWords = new ArrayList<String>();
 		char[] charArray = word.toCharArray();
 
 		for(int i = 0; i < charArray.length; i++) {
@@ -190,10 +190,10 @@ public class Main {
 
 	public static void printLadder(ArrayList<String> ladder) {
 		if(ladder.size() == 2) {
-			System.out.println("no word ladder can be found between " + ladder.get(0) + " and " + ladder.get(1));
+			System.out.println("no word ladder can be found between " + ladder.get(0).toLowerCase() + " and " + ladder.get(1).toLowerCase());
 		}
 		else {
-			System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between " + ladder.get(0) + " and " + ladder.get(ladder.size() - 1) + ".");
+			System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between " + ladder.get(0).toLowerCase() + " and " + ladder.get(ladder.size() - 1).toLowerCase() + ".");
 			for (int i = 0; i < ladder.size(); i++) {
 				System.out.println(ladder.get(i).toLowerCase());
 			}
